@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dynamic monitoring dashboard with simulated Prometheus metrics, Grafana visualizations, and ELK Stack log management for the Multi-Environment Deployment System.">
+    <title>Monitoring Dashboard — MultiEnv</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <!-- Background -->
+    <div class="bg-grid"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">⚡</span>
+            <span class="nav-title">MultiEnv</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link" id="nav-home">Home</a>
+            <a href="dashboard.html" class="nav-link active" id="nav-dashboard">Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard -->
+    <main class="dashboard" id="dashboard">
+        <div class="dash-header">
+            <div>
+                <h1 class="dash-title">📊 Monitoring Dashboard</h1>
+                <p class="dash-subtitle">Real-time infrastructure monitoring · Prometheus · Grafana · ELK Stack</p>
+            </div>
+            <div class="header-actions">
+                <div class="scrape-counter" id="scrape-counter">
+                    <span class="scrape-label">Scrapes</span>
+                    <span class="scrape-value" id="scrape-count">0</span>
+                </div>
+                <div class="live-indicator" id="live-indicator">
+                    <span class="live-dot"></span>
+                    <span>Live</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool Tabs -->
+        <div class="tool-tabs" id="tool-tabs">
+            <button class="tool-tab active" data-tab="prometheus" id="tab-prometheus" onclick="switchTab('prometheus')">
+                <span class="tab-icon">🔥</span> Prometheus
+            </button>
+            <button class="tool-tab" data-tab="grafana" id="tab-grafana" onclick="switchTab('grafana')">
+                <span class="tab-icon">📈</span> Grafana
+            </button>
+            <button class="tool-tab" data-tab="elk" id="tab-elk" onclick="switchTab('elk')">
+                <span class="tab-icon">🔍</span> ELK Stack
+            </button>
+            <button class="tool-tab" data-tab="pipeline" id="tab-pipeline" onclick="switchTab('pipeline')">
+                <span class="tab-icon">🔄</span> Pipeline
+            </button>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TAB: PROMETHEUS (Simulated)                  -->
+        <!-- ============================================ -->
+        <div class="tab-content active" id="content-prometheus">
+            <!-- Prometheus Header -->
+            <div class="tool-header">
+                <div class="tool-brand">
+                    <span class="tool-logo">🔥</span>
+                    <div>
+                        <h2 class="tool-name">Prometheus</h2>
+                        <p class="tool-desc">Metrics Collection & Monitoring — Scraping every 5 seconds</p>
+                    </div>
+                </div>
+                <div class="prom-meta">
+                    <div class="prom-meta-item">
+                        <span class="prom-meta-label">Target</span>
+                        <span class="prom-meta-value" id="prom-target">multi-env-app:9090</span>
+                    </div>
+                    <div class="prom-meta-item">
+                        <span class="prom-meta-label">Last Scrape</span>
+                        <span class="prom-meta-value" id="prom-last-scrape">--</span>
+                    </div>
+                    <div class="prom-meta-item">
+                        <span class="prom-meta-label">Scrape Interval</span>
+                        <span class="prom-meta-value">5s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prometheus Metric Cards (live updating) -->
+            <div class="metrics-grid" id="metrics-grid">
+                <div class="metric-card" id="metric-cpu">
+                    <div class="metric-header">
+                        <span class="metric-icon">🖥️</span>
+                        <span class="metric-label">CPU Usage</span>
+                    </div>
+                    <div class="metric-body">
+                        <div class="progress-ring" id="ring-cpu">
+                            <svg viewBox="0 0 120 120">
+                                <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="ring-fill" cx="60" cy="60" r="52" id="ring-fill-cpu"></circle>
+                            </svg>
+                            <div class="ring-value" id="cpu">--%</div>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <span class="metric-status good" id="cpu-status">● Healthy</span>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="metric-memory">
+                    <div class="metric-header">
+                        <span class="metric-icon">💾</span>
+                        <span class="metric-label">Memory</span>
+                    </div>
+                    <div class="metric-body">
+                        <div class="progress-ring" id="ring-memory">
+                            <svg viewBox="0 0 120 120">
+                                <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="ring-fill" cx="60" cy="60" r="52" id="ring-fill-memory"></circle>
+                            </svg>
+                            <div class="ring-value" id="memory">--%</div>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <span class="metric-status good" id="memory-status">● Healthy</span>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="metric-uptime">
+                    <div class="metric-header">
+                        <span class="metric-icon">⏱️</span>
+                        <span class="metric-label">Uptime</span>
+                    </div>
+                    <div class="metric-body">
+                        <div class="big-stat">
+                            <span class="stat-value" id="uptime">--</span>
+                            <span class="stat-unit">%</span>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <span class="metric-status good" id="uptime-status">● Excellent</span>
+                    </div>
+                </div>
+
+                <div class="metric-card" id="metric-requests">
+                    <div class="metric-header">
+                        <span class="metric-icon">📡</span>
+                        <span class="metric-label">Requests</span>
+                    </div>
+                    <div class="metric-body">
+                        <div class="big-stat">
+                            <span class="stat-value" id="requests">--</span>
+                            <span class="stat-unit">req/s</span>
+                        </div>
+                    </div>
+                    <div class="metric-footer">
+                        <span class="metric-status good" id="requests-status">● Normal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prometheus Raw Metrics Endpoint -->
+            <div class="section-card" id="prom-endpoint-section">
+                <div class="section-header">
+                    <h2 class="section-title">📋 /metrics Endpoint</h2>
+                    <span class="section-badge prom">Prometheus Format</span>
+                </div>
+                <div class="prom-endpoint">
+                    <pre class="prom-output" id="prom-metrics">Loading metrics...</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TAB: GRAFANA (Simulated)                     -->
+        <!-- ============================================ -->
+        <div class="tab-content" id="content-grafana">
+            <div class="tool-header">
+                <div class="tool-brand">
+                    <span class="tool-logo">📈</span>
+                    <div>
+                        <h2 class="tool-name">Grafana</h2>
+                        <p class="tool-desc">Real-time Visualization & Dashboards — Auto-refreshing charts</p>
+                    </div>
+                </div>
+                <div class="grafana-controls">
+                    <select class="grafana-time-range" id="grafana-range" onchange="changeTimeRange()">
+                        <option value="30">Last 30s</option>
+                        <option value="60" selected>Last 60s</option>
+                        <option value="120">Last 2m</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grafana Chart Panels -->
+            <div class="grafana-grid">
+                <div class="grafana-panel" id="panel-cpu">
+                    <div class="panel-header">
+                        <span class="panel-title">CPU Usage (%)</span>
+                        <span class="panel-live-val" id="chart-cpu-val">--</span>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="chart-cpu" width="520" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="grafana-panel" id="panel-memory">
+                    <div class="panel-header">
+                        <span class="panel-title">Memory Usage (%)</span>
+                        <span class="panel-live-val" id="chart-mem-val">--</span>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="chart-memory" width="520" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="grafana-panel" id="panel-network">
+                    <div class="panel-header">
+                        <span class="panel-title">Network I/O (MB/s)</span>
+                        <span class="panel-live-val" id="chart-net-val">--</span>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="chart-network" width="520" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="grafana-panel" id="panel-requests">
+                    <div class="panel-header">
+                        <span class="panel-title">HTTP Requests (req/s)</span>
+                        <span class="panel-live-val" id="chart-req-val">--</span>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="chart-requests" width="520" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TAB: ELK STACK (Simulated)                   -->
+        <!-- ============================================ -->
+        <div class="tab-content" id="content-elk">
+            <div class="tool-header">
+                <div class="tool-brand">
+                    <span class="tool-logo">🔍</span>
+                    <div>
+                        <h2 class="tool-name">ELK Stack</h2>
+                        <p class="tool-desc">Elasticsearch · Logstash · Kibana — Centralized Log Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ELK Architecture -->
+            <div class="elk-arch" id="elk-arch">
+                <div class="elk-node" id="elk-logstash">
+                    <div class="elk-node-icon">📥</div>
+                    <div class="elk-node-name">Logstash</div>
+                    <div class="elk-node-desc">Ingest & Parse</div>
+                    <div class="elk-node-stat"><span id="logstash-events">0</span> events/s</div>
+                </div>
+                <div class="elk-arrow">→</div>
+                <div class="elk-node" id="elk-elasticsearch">
+                    <div class="elk-node-icon">🗄️</div>
+                    <div class="elk-node-name">Elasticsearch</div>
+                    <div class="elk-node-desc">Index & Search</div>
+                    <div class="elk-node-stat"><span id="es-docs">0</span> docs</div>
+                </div>
+                <div class="elk-arrow">→</div>
+                <div class="elk-node" id="elk-kibana">
+                    <div class="elk-node-icon">📊</div>
+                    <div class="elk-node-name">Kibana</div>
+                    <div class="elk-node-desc">Visualize & Explore</div>
+                    <div class="elk-node-stat">Dashboard active</div>
+                </div>
+            </div>
+
+            <!-- Log Search & Filters -->
+            <div class="section-card" id="elk-search-section">
+                <div class="elk-toolbar">
+                    <div class="elk-search-box">
+                        <span class="elk-search-icon">🔍</span>
+                        <input type="text" class="elk-search-input" id="elk-search" placeholder="Search logs... (e.g. ERROR, deploy, production)" oninput="filterLogs()">
+                    </div>
+                    <div class="elk-filters">
+                        <button class="elk-filter active" data-level="all" id="filter-all" onclick="setLogFilter('all')">All</button>
+                        <button class="elk-filter" data-level="INFO" id="filter-info" onclick="setLogFilter('INFO')">INFO</button>
+                        <button class="elk-filter" data-level="SUCCESS" id="filter-success" onclick="setLogFilter('SUCCESS')">SUCCESS</button>
+                        <button class="elk-filter" data-level="WARN" id="filter-warn" onclick="setLogFilter('WARN')">WARN</button>
+                        <button class="elk-filter" data-level="ERROR" id="filter-error" onclick="setLogFilter('ERROR')">ERROR</button>
+                        <button class="elk-filter" data-level="DEBUG" id="filter-debug" onclick="setLogFilter('DEBUG')">DEBUG</button>
+                    </div>
+                </div>
+
+                <!-- Log Count Summary -->
+                <div class="elk-summary" id="elk-summary">
+                    <div class="elk-summary-item">
+                        <span class="elk-count" id="count-total">0</span>
+                        <span class="elk-count-label">Total</span>
+                    </div>
+                    <div class="elk-summary-item info">
+                        <span class="elk-count" id="count-info">0</span>
+                        <span class="elk-count-label">Info</span>
+                    </div>
+                    <div class="elk-summary-item success">
+                        <span class="elk-count" id="count-success">0</span>
+                        <span class="elk-count-label">Success</span>
+                    </div>
+                    <div class="elk-summary-item warn">
+                        <span class="elk-count" id="count-warn">0</span>
+                        <span class="elk-count-label">Warn</span>
+                    </div>
+                    <div class="elk-summary-item error">
+                        <span class="elk-count" id="count-error">0</span>
+                        <span class="elk-count-label">Error</span>
+                    </div>
+                    <div class="elk-summary-item debug">
+                        <span class="elk-count" id="count-debug">0</span>
+                        <span class="elk-count-label">Debug</span>
+                    </div>
+                </div>
+
+                <!-- Live Log Stream -->
+                <div class="elk-logs-container">
+                    <div class="elk-logs-header">
+                        <span>Kibana Discover — Log Stream</span>
+                        <label class="elk-auto-scroll">
+                            <input type="checkbox" id="elk-autoscroll" checked> Auto-scroll
+                        </label>
+                    </div>
+                    <div class="elk-logs" id="elk-logs"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TAB: PIPELINE                                -->
+        <!-- ============================================ -->
+        <div class="tab-content" id="content-pipeline">
+            <div class="tool-header">
+                <div class="tool-brand">
+                    <span class="tool-logo">🔄</span>
+                    <div>
+                        <h2 class="tool-name">Deployment Pipeline</h2>
+                        <p class="tool-desc">CI/CD workflow status across all environments</p>
+                    </div>
+                </div>
+                <span class="section-badge success">All Passed</span>
+            </div>
+
+            <div class="pipeline-visual">
+                <div class="pipe-stage completed" id="pipe-dev">
+                    <div class="pipe-icon">🛠</div>
+                    <div class="pipe-info">
+                        <span class="pipe-name">Development</span>
+                        <span class="pipe-time">2m 14s</span>
+                    </div>
+                    <span class="pipe-check">✓</span>
+                </div>
+                <div class="pipe-connector active"></div>
+                <div class="pipe-stage completed" id="pipe-test">
+                    <div class="pipe-icon">🧪</div>
+                    <div class="pipe-info">
+                        <span class="pipe-name">Testing</span>
+                        <span class="pipe-time">4m 32s</span>
+                    </div>
+                    <span class="pipe-check">✓</span>
+                </div>
+                <div class="pipe-connector active"></div>
+                <div class="pipe-stage completed" id="pipe-prod">
+                    <div class="pipe-icon">🚀</div>
+                    <div class="pipe-info">
+                        <span class="pipe-name">Production</span>
+                        <span class="pipe-time">1m 08s</span>
+                    </div>
+                    <span class="pipe-check">✓</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <p>Multi-Environment Deployment System &copy; 2026 &mdash; Prometheus · Grafana · ELK Stack (Simulated)</p>
+    </footer>
+
+    <script src="dashboard.js"></script>
+
+</body>
+</html>

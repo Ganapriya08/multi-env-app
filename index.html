@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Multi-Environment Deployment System demonstrating CI/CD pipelines with GitHub Actions across Development, Testing, and Production environments.">
+    <title>Multi Environment Deployment System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Animated background particles -->
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">⚡</span>
+            <span class="nav-title">MultiEnv</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active" id="nav-home">Home</a>
+            <a href="dashboard.html" class="nav-link" id="nav-dashboard">Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="main-content">
+        <div class="container" id="main-container">
+            <!-- Environment Badge -->
+            <div class="env-badge" id="env-badge">
+                <span class="badge-dot"></span>
+                <span class="badge-text" id="badge-text">Loading...</span>
+            </div>
+
+            <h1 class="hero-title">
+                Multi-Environment<br>
+                <span class="gradient-text">Deployment System</span>
+            </h1>
+
+            <h2 class="env-title" id="env-title">Detecting...</h2>
+            <p class="env-desc" id="env-desc">Initializing environment detection...</p>
+
+            <!-- Environment Info Cards -->
+            <div class="info-grid">
+                <div class="info-card" id="card-branch">
+                    <div class="info-icon">🌿</div>
+                    <div class="info-label">Branch</div>
+                    <div class="info-value" id="branch-name">--</div>
+                </div>
+                <div class="info-card" id="card-status">
+                    <div class="info-icon">📡</div>
+                    <div class="info-label">Status</div>
+                    <div class="info-value" id="env-status">--</div>
+                </div>
+                <div class="info-card" id="card-version">
+                    <div class="info-icon">🏷️</div>
+                    <div class="info-label">Version</div>
+                    <div class="info-value" id="env-version">--</div>
+                </div>
+            </div>
+
+            <!-- Environment Switcher -->
+            <div class="env-switcher">
+                <p class="switcher-label">Switch Environment</p>
+                <div class="switcher-buttons">
+                    <button class="switch-btn" id="btn-dev" onclick="switchEnv('dev')">
+                        <span class="switch-icon">🛠</span> Development
+                    </button>
+                    <button class="switch-btn" id="btn-test" onclick="switchEnv('test')">
+                        <span class="switch-icon">🧪</span> Testing
+                    </button>
+                    <button class="switch-btn" id="btn-prod" onclick="switchEnv('prod')">
+                        <span class="switch-icon">🚀</span> Production
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pipeline Visualization -->
+            <div class="pipeline">
+                <p class="pipeline-label">Deployment Pipeline</p>
+                <div class="pipeline-track">
+                    <div class="pipeline-stage" id="stage-dev">
+                        <div class="stage-dot"></div>
+                        <span>Dev</span>
+                    </div>
+                    <div class="pipeline-line" id="line-1"></div>
+                    <div class="pipeline-stage" id="stage-test">
+                        <div class="stage-dot"></div>
+                        <span>Test</span>
+                    </div>
+                    <div class="pipeline-line" id="line-2"></div>
+                    <div class="pipeline-stage" id="stage-prod">
+                        <div class="stage-dot"></div>
+                        <span>Prod</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="status-btn" onclick="showStatus()">
+                    <span class="btn-icon">✓</span> Check Status
+                </button>
+                <a href="dashboard.html" class="btn btn-secondary" id="dashboard-link">
+                    <span class="btn-icon">📊</span> Open Dashboard
+                </a>
+            </div>
+
+            <p class="status-message" id="status"></p>
+        </div>
+
+        <!-- Tech Stack Section -->
+        <div class="tech-section" id="tech-section">
+            <h3 class="section-title">Built With</h3>
+            <div class="tech-grid">
+                <div class="tech-item" id="tech-html"><span>HTML5</span></div>
+                <div class="tech-item" id="tech-css"><span>CSS3</span></div>
+                <div class="tech-item" id="tech-js"><span>JavaScript</span></div>
+                <div class="tech-item" id="tech-git"><span>Git</span></div>
+                <div class="tech-item" id="tech-gh"><span>GitHub</span></div>
+                <div class="tech-item" id="tech-actions"><span>GitHub Actions</span></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <p>Multi-Environment Deployment System &copy; 2026 &mdash; Powered by GitHub Actions CI/CD</p>
+    </footer>
+
+    <script src="env.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
